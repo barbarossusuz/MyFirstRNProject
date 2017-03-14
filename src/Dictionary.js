@@ -47,7 +47,7 @@ export default class PdfViewer extends Component {
 
 const styles = StyleSheet.create({
     footer: {
-        flex: 5,
+        flex: 4,
         flexDirection: "row",
         alignItems: "center",
         backgroundColor: "#15c7ff",

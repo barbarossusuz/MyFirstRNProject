@@ -45,7 +45,7 @@ export default class PdfViewer extends Component {
         return (
             <View style={{flex:1}}>
 
-                <View style={styles.header}>
+                <View style={[styles.header,this.state.durum =="main"? {flex: 1}: {flex: 1.2}]}>
                     {this.renderFileName()}
 
                     {this.renderPageCount()}
@@ -89,7 +89,7 @@ export default class PdfViewer extends Component {
                         </View>
 
                         <View>
-                            <TouchableOpacity onPress={this.renderExcelFile}>
+                            <TouchableOpacity onPress={()=> this.setState({durum:"excel"})}>
                                 <Text style={styles.backButton}>{"+"}</Text>
                             </TouchableOpacity>
                         </View>
@@ -118,20 +118,6 @@ export default class PdfViewer extends Component {
     };
 
 
-    renderExcelFile() {
-        this.setState({durum: "excel"});
-    }
-
-
-    addExcelFile() {
-        return (
-            <View style={{marginRight:10}}>
-                <TouchableOpacity onPress={Actions.pop}>
-                    <Text style={styles.backButton}>{"+"}</Text>
-                </TouchableOpacity>
-            </View>
-        );
-    }
 
     renderItems() {
         let args = [];
@@ -155,17 +141,21 @@ export default class PdfViewer extends Component {
     renderFileName() {
         if (this.state.isPdfDownload) {
             return (
-                <View style={{flexDirection: "row", alignItems: "center",}}>
+                <View style={[styles.headerItems,{flex:2,justifyContent: "flex-start"}]}>
+                    <View style={{flex:1}}>
                     <TouchableOpacity onPress={Actions.pop}>
                         <Text style={styles.backButton}>{"←"}</Text>
                     </TouchableOpacity>
+                    </View>
+                    <View style={{justifyContent: "flex-start",flex:5}}>
                     <Text style={styles.fileName}>{(this.fileName).toUpperCase()}</Text>
+                    </View>
                 </View>
             );
         }
         else {
             return (
-                <View style={{flexDirection: "row", alignItems: "center",}}>
+                <View style={[styles.headerItems,{flex:2,justifyContent: "flex-start"}]}>
                     <TouchableOpacity onPress={Actions.pop}>
                         <Text style={styles.backButton}>{"←"}</Text>
                     </TouchableOpacity>
@@ -178,7 +168,7 @@ export default class PdfViewer extends Component {
     renderPageCount() {
         if (this.state.isPdfDownload) {
             return (
-                <View style={styles.deneme}>
+                <View style={[styles.headerItems,{flex:1.5,justifyContent: "center"}]}>
                     <View>
                         <Text style={styles.fileName}>{this.state.pageCount + " /"}</Text>
                     </View>
@@ -200,6 +190,17 @@ export default class PdfViewer extends Component {
             return null;
         }
     }
+
+    addExcelFile() {
+        return (
+            <View style={[styles.headerItems,{flex:2,justifyContent:"flex-end"}]}>
+                <TouchableOpacity onPress={Actions.pop}>
+                    <Text style={styles.backButton}>{"+"}</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
 
     zoom(val = 1) {
         // this.pdfView && setTimeout(() => {
@@ -246,19 +247,16 @@ const styles = StyleSheet.create({
     fileName: {
         color: "#fbfff6",
         fontWeight: "bold",
-        fontSize: 16,
-        marginLeft: 10
+        fontSize: 16
     },
     backButton: {
         color: "#fbfff6",
         fontWeight: "bold",
-        fontSize: 30,
-        marginBottom: 8
+        fontSize: 16
     },
 
-    deneme: {
+    headerItems: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: "#15c7ff",
     }
 });
