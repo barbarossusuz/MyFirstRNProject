@@ -11,6 +11,8 @@ import { Router, Scene } from 'react-native-router-flux';
 
 import WelcomePage from "./src/WelcomePage";
 import PdfViewer from "./src/PdfViewer";
+import Dictionary from "./src/Dictionary";
+
 
 
 class MyFirstRNProject extends Component {
@@ -26,6 +28,7 @@ class MyFirstRNProject extends Component {
                 <Scene key="root">
                     <Scene key="welcomePage"  component={WelcomePage} hideNavBar={true}  initial={true} />
                     <Scene key="pdfViewer" component={PdfViewer} hideNavBar={true}  />
+                    <Scene key="dictionaru" component={Dictionary} hideNavBar={true}  />
                 </Scene>
             </Router>
         )

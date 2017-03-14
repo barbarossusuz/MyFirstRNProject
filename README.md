@@ -8,3 +8,7 @@ Components:
 
 " https://github.com/cnjon/react-native-pdf-view "
 
+" https://github.com/matheuss/google-translate-api "
+
+" https://github.com/oblador/react-native-vector-icons "
+

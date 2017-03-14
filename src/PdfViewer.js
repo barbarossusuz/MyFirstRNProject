@@ -9,7 +9,8 @@ import {
     AppRegistry,
     Picker,
     TouchableOpacity,
-    ToastAndroid
+    ToastAndroid,
+    BackAndroid
 } from 'react-native';
 
 import PDFView from 'react-native-pdf-view';
@@ -17,6 +18,7 @@ import RNFS from 'react-native-fs';
 import {Clipboard} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import Dictionary from "./Dictionary";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 export default class PdfViewer extends Component {
@@ -74,81 +76,17 @@ export default class PdfViewer extends Component {
         )
     }
 
-
-    renderFooter() {
-        console.log("main",this.state.durum);
-        if (this.state.durum === "main") {
-            return (
-                <View ref="footer" style={styles.footer}>
-
-
-                        <View>
-                            <TouchableOpacity onPress={()=> this.setState({durum:"dictionary"})}>
-                                <Text style={styles.backButton}>{"+"}</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View>
-                            <TouchableOpacity onPress={()=> this.setState({durum:"excel"})}>
-                                <Text style={styles.backButton}>{"+"}</Text>
-                            </TouchableOpacity>
-                        </View>
-
-
-                </View>
-            );
-        }
-
-         if (this.state.durum === "dictionary") {
-            return (
-                <Dictionary onChange={this.changeToMainFooter}/>
-            );
-        }
-
-         if (this.state.durum === "excel") {
-            return (
-                null
-            );
-        }
-    }
-
-
-    changeToMainFooter=()=>{
-        this.setState({durum: "main"})
-    };
-
-
-
-    renderItems() {
-        let args = [];
-        for (let i = 1; i <= this.state.pageCount; i++) {
-            args.push(<Picker.Item key={i.toString()} label={i.toString()} color="black" value={i}/>)
-        }
-        return args;
-    }
-
-    renderTextInput(text) {
-        let text1 = parseInt(text);
-        if (1 <= text1 <= this.state.pageCount) {
-            setTimeout(() => {
-                this.setState({pageNumber: text1});
-            }, 500)
-        }
-        else return null;
-    }
-
-
     renderFileName() {
         if (this.state.isPdfDownload) {
             return (
                 <View style={[styles.headerItems,{flex:2,justifyContent: "flex-start"}]}>
                     <View style={{flex:1}}>
-                    <TouchableOpacity onPress={Actions.pop}>
-                        <Text style={styles.backButton}>{"←"}</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={Actions.pop}>
+                            <Icon name="angle-double-left" size={30} color="#fbfff6" />
+                        </TouchableOpacity>
                     </View>
                     <View style={{justifyContent: "flex-start",flex:5}}>
-                    <Text style={styles.fileName}>{(this.fileName).toUpperCase()}</Text>
+                        <Text style={styles.fileName}>{(this.fileName).toUpperCase()}</Text>
                     </View>
                 </View>
             );
@@ -157,7 +95,7 @@ export default class PdfViewer extends Component {
             return (
                 <View style={[styles.headerItems,{flex:2,justifyContent: "flex-start"}]}>
                     <TouchableOpacity onPress={Actions.pop}>
-                        <Text style={styles.backButton}>{"←"}</Text>
+                        <Icon name="angle-double-left" size={30} color="#fbfff6" />
                     </TouchableOpacity>
                 </View>
             );
@@ -176,7 +114,7 @@ export default class PdfViewer extends Component {
                         <Picker
                             style={{width:50,height:20}}
                             selectedValue={this.state.pageNumber}
-                            onValueChange={(text) => this.renderTextInput(text)}
+                            onValueChange={(text) => this.renderPageNumber(text)}
                             mode="dropdown">
                             {this.renderItems()}
                         </Picker>
@@ -190,16 +128,73 @@ export default class PdfViewer extends Component {
             return null;
         }
     }
+    renderItems() {
+        let args = [];
+        for (let i = 1; i <= this.state.pageCount; i++) {
+            args.push(<Picker.Item key={i.toString()} label={i.toString()} color="black" value={i}/>)
+        }
+        return args;
+    }
+    renderPageNumber(text) {
+        let text1 = parseInt(text);
+        if (1 <= text1 <= this.state.pageCount) {
+            setTimeout(() => {
+                this.setState({pageNumber: text1});
+            }, 500)
+        }
+        else return null;
+    }
 
     addExcelFile() {
         return (
             <View style={[styles.headerItems,{flex:2,justifyContent:"flex-end"}]}>
                 <TouchableOpacity onPress={Actions.pop}>
-                    <Text style={styles.backButton}>{"+"}</Text>
+                    <Icon name="plus-square-o" size={30} color="#fbfff6" />
                 </TouchableOpacity>
             </View>
         );
     }
+
+    renderFooter() {
+        console.log("main",this.state.durum);
+        if (this.state.durum === "main") {
+            return (
+                <View ref="footer" style={styles.footer}>
+
+                        <View >
+                            <TouchableOpacity onPress={()=> this.setState({durum:"dictionary"})}>
+                                <Icon name="book" size={30} color="#fbfff6" />
+                            </TouchableOpacity>
+                        </View>
+
+
+                        <View >
+                            <TouchableOpacity onPress={()=> this.setState({durum:"excel"})}>
+                                <Icon name="file-excel-o" size={30} color="#fbfff6" />
+                            </TouchableOpacity>
+                        </View>
+
+                </View>
+            );
+        }
+
+         if (this.state.durum === "dictionary") {
+            return (
+                <Dictionary ref="dictionary" onChange={this.changeToMainFooter}/>
+            );
+        }
+
+         if (this.state.durum === "excel") {
+            return (
+                null
+            );
+        }
+    }
+
+    changeToMainFooter=()=>{
+        this.setState({durum: "main"})
+    };
+
 
 
     zoom(val = 1) {
@@ -208,7 +203,22 @@ export default class PdfViewer extends Component {
         // }, 3000);
     }
 
+
+    onBackPress(){
+        if(this.refs.dictionary){
+        if(this.state.durum!=="main"){
+            this.setState({durum:"main"});
+            return true;
+        }
+        }
+        else return false;
+    }
+
+    componentWillUnmount(){
+        BackAndroid.removeEventListener('hardwareBackPress', this.onBackPress.bind(this));
+    }
     componentDidMount() {
+        BackAndroid.addEventListener('hardwareBackPress', this.onBackPress.bind(this));
         const options = {
             fromUrl: this.pdfDownloadURL,
             toFile: this.pdfPath
@@ -234,7 +244,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         backgroundColor: "#15c7ff",
-        justifyContent: "space-between",
+        justifyContent: "space-around",
     },
     loading: {
         flex: 14,

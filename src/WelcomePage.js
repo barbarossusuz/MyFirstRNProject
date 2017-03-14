@@ -48,9 +48,10 @@ export default class WelcomePage extends Component {
                         <Text
                             style={{color: "white", fontWeight: "bold", fontSize: 16}}>Please Write Pdf Url Here :</Text>
                         <TextInput
-                            style={{height: 40, borderColor: 'gray'}}
+                            style={{height: 40}}
                             autoCorrect={false}
                             onSubmitEditing={(event) => this.onSubmitEdditing(event.nativeEvent.text)}
+                            keyboardType="web-search"
                         />
                     </View>
 
@@ -63,7 +64,6 @@ export default class WelcomePage extends Component {
     }
 
     onSubmitEdditing(text){
-        console.log("textinput", text);
         if(text.replace(/^.*[\\\/]/, '').slice(-4) ===".pdf"){
             console.log("pdftir");
         Actions.pdfViewer({pdfDownloadURL: text});

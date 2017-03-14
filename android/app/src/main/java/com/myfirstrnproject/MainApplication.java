@@ -13,6 +13,8 @@ import com.facebook.soloader.SoLoader;
 
 import com.keyee.pdfview.PDFView;
 import com.rnfs.RNFSPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +32,9 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new PDFView(),
-            new RNFSPackage()
+            new RNFSPackage(),
+            new VectorIconsPackage()
+
       );
     }
   };
