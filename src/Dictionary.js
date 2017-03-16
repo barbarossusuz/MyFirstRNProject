@@ -57,7 +57,7 @@ export default class Dictionary extends Component {
                     </View>
                     <View style={{flex:1}}>
                     <Text style={styles.label2}> Its Turkish equivalent is: </Text>
-                    <Text style={styles.word}>{" "}{this.state.turkText}</Text>
+                    <Text style={styles.word}>{" "}{this.state.meaning}</Text>
                     </View>
                 </View>
 

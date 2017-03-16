@@ -1,6 +1,5 @@
 'use strict';
 import React, {Component} from 'react';
-import XLSX from "xlsx";
 import {
     StyleSheet,
     Text,
@@ -18,6 +17,7 @@ import RNFS from 'react-native-fs';
 import {Clipboard} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import Dictionary from "./Dictionary";
+import Excel from "./Excel";
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
@@ -156,7 +156,6 @@ export default class PdfViewer extends Component {
     }
 
     renderFooter() {
-        console.log("main",this.state.durum);
         if (this.state.durum === "main") {
             return (
                 <View ref="footer" style={styles.footer}>
@@ -186,7 +185,7 @@ export default class PdfViewer extends Component {
 
          if (this.state.durum === "excel") {
             return (
-                null
+                <Excel ref="excel" onChange={this.changeToMainFooter}/>
             );
         }
     }
@@ -205,7 +204,7 @@ export default class PdfViewer extends Component {
 
 
     onBackPress(){
-        if(this.refs.dictionary){
+        if(this.refs.dictionary || this.refs.excel){
         if(this.state.durum!=="main"){
             this.setState({durum:"main"});
             return true;
@@ -218,32 +217,6 @@ export default class PdfViewer extends Component {
         BackAndroid.removeEventListener('hardwareBackPress', this.onBackPress.bind(this));
     }
 
-    deneme(){
-        /* set up XMLHttpRequest */
-        var url = "http://spreadsheetpage.com/downloads/xl/worksheet%20functions.xlsx";
-        var oReq = new XMLHttpRequest();
-        oReq.open("GET", url, true);
-        oReq.responseType = "arraybuffer";
-
-        oReq.onload = function(e) {
-            var arraybuffer = oReq.response;
-
-            /* convert data to binary string */
-            var data = new Uint8Array(arraybuffer);
-            var arr = new Array();
-            for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-            var bstr = arr.join("");
-
-            /* Call XLSX */
-            var workbook = XLSX.read(bstr, {type:"binary"});
-
-            /* DO SOMETHING WITH workbook HERE */
-            console.log("dosya", workbook.SheetNames[0]);
-            console.log("dosya", workbook.Sheets[workbook.SheetNames[0]]);
-        }
-
-        oReq.send();
-    }
 
     componentDidMount() {
         BackAndroid.addEventListener('hardwareBackPress', this.onBackPress.bind(this));
@@ -257,8 +230,6 @@ export default class PdfViewer extends Component {
         }).catch(err => {
             ToastAndroid.showWithGravity("Invalid Url", ToastAndroid.LONG, ToastAndroid.CENTER);
         });
-
-        this.deneme();
     }
 }
 const styles = StyleSheet.create({

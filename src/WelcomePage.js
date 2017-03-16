@@ -65,7 +65,6 @@ export default class WelcomePage extends Component {
 
     onSubmitEdditing(text){
         if(text.replace(/^.*[\\\/]/, '').slice(-4) ===".pdf"){
-            console.log("pdftir");
         Actions.pdfViewer({pdfDownloadURL: text});
         }
         else {
@@ -77,7 +76,6 @@ export default class WelcomePage extends Component {
         let text = "http://www.pdf995.com/samples/pdf.pdf";
         console.log("button", text);
         if(text.replace(/^.*[\\\/]/, '').slice(-4) ===".pdf"){
-            console.log("pdftir");
             Actions.pdfViewer({pdfDownloadURL: text});
         }
         else {
