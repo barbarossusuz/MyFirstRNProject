@@ -12,3 +12,5 @@ Components:
 
 " https://github.com/oblador/react-native-vector-icons "
 
+" https://github.com/SheetJS/js-xlsx "
+

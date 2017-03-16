@@ -21,7 +21,8 @@ export default class Dictionary extends Component {
         super(props);
         this.state = {
             ingText: "",
-            turkText:""
+            turkText:"",
+            dicType: true
         };
     }
 
@@ -37,12 +38,20 @@ export default class Dictionary extends Component {
                     </TouchableOpacity>
                 </View>
 
+                {/*<View style={styles.changeButton}>*/}
+                    {/*<TouchableOpacity >*/}
+                        {/*<Icon name="info" size={20} color="#fbfff6" />*/}
+                    {/*</TouchableOpacity>*/}
+                    {/*<Text style={styles.label2}>  Cevir </Text>*/}
+                {/*</View>*/}
+
                 <View style={styles.parent}>
                     <View style={{flex:1}}>
                     <Text style={styles.label}>  Type something in English: </Text>
                     <TextInput
                         style={{height: 35}}
-                        onSubmitEditing={(event) => this.getWord(event.nativeEvent.text)}
+                        onSubmitEditing={(event) => {event.nativeEvent.text.indexOf(" ") > 0 ?
+                        this.transltr(event.nativeEvent.text) : this.cevir(event.nativeEvent.text)}}
                         value={this.state.text}
                     />
                     </View>
@@ -59,9 +68,9 @@ export default class Dictionary extends Component {
     }
 
 
-    getWord(text){
-        this.setState({turkText:""})
-        console.log("textımput",text);
+    cevir(text){
+        this.setState({turkText:""});
+        console.log("cevir",text);
         //https://translation.googleapis.com/language/translate/v2?key=AIzaSyBMzJKS2dAXIQURxPda8KwJwQW7QoBQkAs&source=en&target=de&q=Hello%20world&q=My%20name%20is%20Jeff
 
         fetch("http://cevir.ws/v1?q="+ text +"&m=5&p=exact&l=en")
@@ -82,6 +91,28 @@ export default class Dictionary extends Component {
                 console.error(error);
             });
     }
+    transltr(text){
+        this.setState({turkText:""});
+        console.log("transltr",text);
+        //TODO ingilizceden türkçe olmuyor site de sorun var
+        fetch("http://www.transltr.org/api/translate?text="+ text +"&to=eng&from=tr")
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log("responsejson",responseJson);
+
+                if(responseJson){
+                    if(responseJson.translationText){
+                        let s =responseJson.translationText;
+                        this.setState({turkText: s});
+                    } else this.setState({turkText: "Bir şeyler yanlış gitti, daha sonra tekrar deneyiniz. :: Try again later."})
+
+                }else this.setState({turkText: "No Result!"})
+
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
     componentDidMount(){
     }
 }
@@ -95,9 +126,13 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
     },
     backButton: {
-        backgroundColor: "#15c7ff",
         marginTop: -8
     },
+    // changeButton: {
+    //     marginTop: -20,
+    //     alignItems: "center",
+    //     alignSelf: "flex-start"
+    // },
     // For the container View
     parent: {
         flexDirection: "row"
