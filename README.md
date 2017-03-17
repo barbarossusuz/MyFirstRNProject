@@ -1,6 +1,6 @@
 "# Pdf Viewer with dictionary"
 
-Components:
+Components and Libraries:
 
 " https://github.com/johanneslumpe/react-native-fs "
 

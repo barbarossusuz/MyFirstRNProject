@@ -15,7 +15,6 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Clipboard} from 'react-native';
 import RNFS from 'react-native-fs';
-import XLSX from "xlsx";
 
 
 
@@ -104,8 +103,8 @@ export default class Excel extends Component {
     }
 
     excelParse2(){
-        let workbook = XLSX.readFile("./terimler.xlsx");
-
+        var XLSX = require('xlsx');
+        var xlsx = XLSX.read(RNFS.readFile("file:///"+this.pdfPath), {type:'buffer'});
 
         /* DO SOMETHING WITH workbook HERE */
         let excelName= workbook.SheetNames[0];
