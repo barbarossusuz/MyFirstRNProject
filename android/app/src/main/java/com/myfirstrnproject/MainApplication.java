@@ -11,9 +11,9 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
-import com.keyee.pdfview.PDFView;
 import com.rnfs.RNFSPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
+import com.filepicker.FilePickerPackage;
 
 
 import java.util.Arrays;
@@ -33,8 +33,8 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new PDFView(),
             new RNFSPackage(),
-            new VectorIconsPackage()
-
+            new VectorIconsPackage(),
+            new FilePickerPackage()
       );
     }
   };

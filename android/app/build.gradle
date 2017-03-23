@@ -127,13 +127,15 @@ android {
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 dependencies {
+    compile project(':react-native-pdf-view')
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
 
-    compile project(':PDFView')
     compile project(':react-native-fs')
     compile project(':react-native-vector-icons')
+    compile project(':react-native-file-picker')
+
 
 }
 

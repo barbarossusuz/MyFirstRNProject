@@ -34,16 +34,9 @@ export default class Dictionary extends Component {
 
                 <View style={styles.backButton}>
                     <TouchableOpacity onPress={this.props.onChange}>
-                        <Icon name="angle-double-down" size={35} color="#fbfff6" />
+                        <Icon name="chevron-down" size={25} color="#fbfff6" />
                     </TouchableOpacity>
                 </View>
-
-                {/*<View style={styles.changeButton}>*/}
-                    {/*<TouchableOpacity >*/}
-                        {/*<Icon name="info" size={20} color="#fbfff6" />*/}
-                    {/*</TouchableOpacity>*/}
-                    {/*<Text style={styles.label2}>  Cevir </Text>*/}
-                {/*</View>*/}
 
                 <View style={styles.parent}>
                     <View style={{flex:1}}>
@@ -57,7 +50,7 @@ export default class Dictionary extends Component {
                     </View>
                     <View style={{flex:1}}>
                     <Text style={styles.label2}> Its Turkish equivalent is: </Text>
-                    <Text style={styles.word}>{" "}{this.state.meaning}</Text>
+                    <Text style={styles.word}>{" "}{this.state.turkText}</Text>
                     </View>
                 </View>
 
@@ -80,7 +73,7 @@ export default class Dictionary extends Component {
 
             if(responseJson.control.results!=0){
             if(responseJson.word["0"].desc){
-                let s =responseJson.word["0"].desc;
+                let s =responseJson.word[0].desc;
                 this.setState({turkText: s});
             } else this.setState({turkText: "No Result!"})
 
@@ -122,17 +115,12 @@ const styles = StyleSheet.create({
         flex: 4,
         flexDirection: "column",
         alignItems: "center",
-        backgroundColor: "#15c7ff",
+        backgroundColor: "#337ab7",
         justifyContent: "flex-start",
     },
     backButton: {
-        marginTop: -8
+        marginTop: -6
     },
-    // changeButton: {
-    //     marginTop: -20,
-    //     alignItems: "center",
-    //     alignSelf: "flex-start"
-    // },
     // For the container View
     parent: {
         flexDirection: "row"

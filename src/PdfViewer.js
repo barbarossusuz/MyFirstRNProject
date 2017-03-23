@@ -33,17 +33,18 @@ export default class PdfViewer extends Component {
             mode: Picker.MODE_DIALOG,
             durum: "main"
         };
-        this.pdfDownloadURL = this.props.pdfDownloadURL;
-        this.fileName = (this.pdfDownloadURL).replace(/^.*[\\\/]/, '').slice(0, -4);
+        this.pdfPathFromDevice= this.props.pdfPathFromDevice || undefined;
+        this.pdfDownloadURL = this.props.pdfDownloadURL || undefined;
+        this.fileName = (this.pdfDownloadURL ===undefined ? this.pdfPathFromDevice : this.pdfDownloadURL).replace(/^.*[\\\/]/, '').slice(0, -4);
+
+        this.pdfPathFromUrl= RNFS.DocumentDirectoryPath + "/" + this.fileName + ".pdf";
 
         this.pdfView = null;
-        this.pdfPath = RNFS.DocumentDirectoryPath + "/" + this.fileName + ".pdf";
 
     }
 
     render() {
-        console.log("download", this.pdfPath);
-
+        console.log("path",this.pdfPathFromUrl);
         return (
             <View style={{flex:1}}>
 
@@ -58,7 +59,7 @@ export default class PdfViewer extends Component {
                 {this.state.isPdfDownload ?
                     <PDFView ref={(pdf)=>{this.pdfView = pdf;}}
                              key="sop"
-                             path={this.pdfPath}
+                             path={this.pdfPathFromDevice === undefined ? this.pdfPathFromUrl : this.pdfPathFromDevice}
                              pageNumber={this.state.pageNumber}
                              onLoadComplete={(pageCount)=>{
                          this.setState({pageCount: pageCount});
@@ -82,7 +83,7 @@ export default class PdfViewer extends Component {
                 <View style={[styles.headerItems,{flex:2,justifyContent: "flex-start"}]}>
                     <View style={{flex:1}}>
                         <TouchableOpacity onPress={Actions.pop}>
-                            <Icon name="angle-double-left" size={30} color="#fbfff6" />
+                            <Icon name="chevron-left" size={20} color="#fbfff6" />
                         </TouchableOpacity>
                     </View>
                     <View style={{justifyContent: "flex-start",flex:5}}>
@@ -95,7 +96,7 @@ export default class PdfViewer extends Component {
             return (
                 <View style={[styles.headerItems,{flex:2,justifyContent: "flex-start"}]}>
                     <TouchableOpacity onPress={Actions.pop}>
-                        <Icon name="angle-double-left" size={30} color="#fbfff6" />
+                        <Icon name="chevron-left" size={20} color="#fbfff6" />
                     </TouchableOpacity>
                 </View>
             );
@@ -199,37 +200,46 @@ export default class PdfViewer extends Component {
     zoom(val = 1) {
         // this.pdfView && setTimeout(() => {
         //     this.pdfView.setNativeProps({zoom: val});
-        // }, 3000);
+        // }, 1500);
     }
 
 
     onBackPress(){
-        if(this.refs.dictionary || this.refs.excel){
-        if(this.state.durum!=="main"){
-            this.setState({durum:"main"});
-            return true;
-        }
+        if(this.refs.dictionary || this.refs.excel) {
+            if (this.state.durum !== "main") {
+                this.setState({durum: "main"});
+                return true;
+            }
         }
         else return false;
     }
 
+    downloadFileToDevice(){
+        if(this.pdfDownloadURL !== undefined) {
+            const options = {
+                fromUrl: this.pdfDownloadURL,
+                toFile: this.pdfPathFromUrl
+            };
+            RNFS.downloadFile(options).promise.then(res => {
+                this.setState({isPdfDownload: true});
+                this.pdfDownloadURL = "";
+            }).catch(err => {
+                ToastAndroid.showWithGravity("Invalid Url", ToastAndroid.LONG, ToastAndroid.CENTER);
+            });
+        }
+        if(this.pdfPathFromDevice !==undefined)
+            this.setState({isPdfDownload: true});
+
+    }
     componentWillUnmount(){
         BackAndroid.removeEventListener('hardwareBackPress', this.onBackPress.bind(this));
     }
 
 
     componentDidMount() {
+        console.log("downloadurl" , this.pdfDownloadURL);
         BackAndroid.addEventListener('hardwareBackPress', this.onBackPress.bind(this));
-        const options = {
-            fromUrl: this.pdfDownloadURL,
-            toFile: this.pdfPath
-        };
-        RNFS.downloadFile(options).promise.then(res => {
-            this.setState({isPdfDownload: true});
-            this.pdfDownloadURL = "";
-        }).catch(err => {
-            ToastAndroid.showWithGravity("Invalid Url", ToastAndroid.LONG, ToastAndroid.CENTER);
-        });
+        this.downloadFileToDevice();
     }
 }
 const styles = StyleSheet.create({
@@ -237,14 +247,14 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: "#15c7ff",
+        backgroundColor: "#1E88E5",
         justifyContent: "space-between",
     },
     footer: {
         flex: 1,
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: "#15c7ff",
+        backgroundColor: "#1E88E5",
         justifyContent: "space-around",
     },
     loading: {
@@ -260,12 +270,6 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 16
     },
-    backButton: {
-        color: "#fbfff6",
-        fontWeight: "bold",
-        fontSize: 16
-    },
-
     headerItems: {
         flexDirection: "row",
         alignItems: "center",

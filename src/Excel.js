@@ -15,6 +15,8 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Clipboard} from 'react-native';
 import RNFS from 'react-native-fs';
+import XLSX from "xlsx";
+
 
 
 
@@ -41,9 +43,10 @@ export default class Excel extends Component {
 
                 <View style={styles.backButton}>
                     <TouchableOpacity onPress={this.props.onChange}>
-                        <Icon name="angle-double-down" size={35} color="#fbfff6" />
+                        <Icon name="chevron-down" size={25} color="#fbfff6" />
                     </TouchableOpacity>
                 </View>
+
                 <View style={styles.parent}>
                     <View style={{flex:1}}>
                         <Text style={styles.label}>  Enter word of looking for: </Text>
@@ -53,6 +56,7 @@ export default class Excel extends Component {
                             value={this.state.text}
                         />
                     </View>
+
                     <View style={{flex:1}}>
                         <Text style={styles.label2}> Its equivalent is: </Text>
                         <Text style={styles.word}>{" "}{this.state.meaning}</Text>
@@ -65,54 +69,56 @@ export default class Excel extends Component {
         )
     }
 
-    excelParse(){
-        // /* set up XMLHttpRequest */
-        //
-        // let url = "http://spreadsheetpage.com/downloads/xl/worksheet%20functions.xlsx";
-        // // let url = "data/user/0/com.myfirstrnproject/files/test.xlsx";
-        //
-        // let oReq = new XMLHttpRequest();
-        // oReq.open("GET", url, true);
-        // oReq.responseType = "arraybuffer";
-        //
-        //
-        // oReq.onload = function(e) {
-        //     let arraybuffer = oReq.response;
-        //
-        //     /* convert data to binary string */
-        //     let data = new Uint8Array(arraybuffer);
-        //     let arr = [];
-        //     for(let i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-        //     let bstr = arr.join("");
-        //
-        //
-        //     /* Call XLSX */
-        //     let workbook = XLSX.read(bstr, {type:"binary"});
-        //
-        //
-        //     /* DO SOMETHING WITH workbook HERE */
-        //     let excelName= workbook.SheetNames[0];
-        //     let workSheet = workbook.Sheets[excelName];
-        //     let excelToJson= XLSX.utils.sheet_to_json(workSheet);
-        //
-        //     console.log("dosya",excelName );
-        //     console.log("dosya", excelToJson );
-        // };
-        //
-        // oReq.send();
-    }
+    // excelParse(){
+    //     /* set up XMLHttpRequest */
+    //
+    //     let url = "http://www.nature.com/authorguide/sdata/Data-Descriptor-tables-template-for-authors.xlsx";
+    //
+    //     let oReq = new XMLHttpRequest();
+    //     oReq.open("GET", url, true);
+    //     oReq.responseType = "arraybuffer";
+    //
+    //
+    //     oReq.onload = function(e) {
+    //         let arraybuffer = oReq.response;
+    //
+    //         /* convert data to binary string */
+    //         let data = new Uint8Array(arraybuffer);
+    //         let arr = [];
+    //         for(let i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+    //         let bstr = arr.join("");
+    //
+    //
+    //         /* Call XLSX */
+    //         let workbook = XLSX.read(bstr, {type:"binary"});
+    //
+    //
+    //         /* DO SOMETHING WITH workbook HERE */
+    //         let excelName= workbook.SheetNames[0];
+    //         let workSheet = workbook.Sheets[excelName];
+    //         let excelToJson= XLSX.utils.sheet_to_json(workSheet);
+    //
+    //         console.log("dosya",excelName );
+    //         console.log("dosya", excelToJson );
+    //         excelToJson.map(get =>{
+    //             console.log("map", get);
+    //         })
+    //     };
+    //
+    //     oReq.send();
+    // }
 
     excelParse2(){
-        var XLSX = require('xlsx');
-        var xlsx = XLSX.read(RNFS.readFile("file:///"+this.pdfPath), {type:'buffer'});
-
-        /* DO SOMETHING WITH workbook HERE */
-        let excelName= workbook.SheetNames[0];
-        let workSheet = workbook.Sheets[excelName];
-        let excelToJson= XLSX.utils.sheet_to_json(workSheet);
-
-        console.log("dosya",excelName );
-        console.log("dosya", excelToJson );
+        // var XLSX = require('xlsx');
+        // var xlsx = XLSX.read(RNFS.readFile("/data/user/0/com.myfirstrnproject/files/terimler.xlsx"), {type:'buffer'});
+        //
+        // /* DO SOMETHING WITH workbook HERE */
+        // let excelName= workbook.SheetNames[0];
+        // let workSheet = workbook.Sheets[excelName];
+        // let excelToJson= XLSX.utils.sheet_to_json(workSheet);
+        //
+        // console.log("dosya",excelName );
+        // console.log("dosya", excelToJson );
 
     }
 
@@ -130,9 +136,7 @@ export default class Excel extends Component {
 
 
     componentDidMount(){
-        // this.excelParse();
         this.excelParse2();
-
         const options = {
             fromUrl: this.pdfDownloadURL,
             toFile: this.pdfPath
@@ -151,17 +155,12 @@ const styles = StyleSheet.create({
         flex: 4,
         flexDirection: "column",
         alignItems: "center",
-        backgroundColor: "#15c7ff",
+        backgroundColor: "#337ab7",
         justifyContent: "flex-start",
     },
     backButton: {
-        marginTop: -8
+        marginTop: -6
     },
-    // changeButton: {
-    //     marginTop: -20,
-    //     alignItems: "center",
-    //     alignSelf: "flex-start"
-    // },
     // For the container View
     parent: {
         flexDirection: "row"

@@ -9,11 +9,12 @@
   "dependencies": {
     "react": "15.4.2",
     "react-native": "0.41.2",
+    "react-native-file-picker": "0.0.5",
     "react-native-fs": "^2.1.0-rc.1",
     "react-native-pdf-view": "^0.3.2",
     "react-native-router-flux": "^3.38.0",
     "react-native-vector-icons": "^4.0.0",
-    "xlsx": "^0.9.3"
+    "xlsx": "^0.9.4"
   },
   "devDependencies": {
     "babel-jest": "18.0.0",

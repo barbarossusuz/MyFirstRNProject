@@ -17,10 +17,6 @@ import Dictionary from "./src/Dictionary";
 
 class MyFirstRNProject extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {}
-    }
 
     render() {
         return (
